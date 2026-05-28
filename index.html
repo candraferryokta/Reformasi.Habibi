@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arsip Digital: Era Reformasi & B.J. Habibie</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            DEFAULT: '#0B192C',
+                            light: '#1E3E62',
+                            dark: '#000814'
+                        },
+                        gold: {
+                            DEFAULT: '#FFD700',
+                            dark: '#D4AF37',
+                            light: '#FFF099'
+                        },
+                        modernGray: '#F1F5F9'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        montserrat: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate On Scroll (AOS) CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* Custom Styles for Premium & Futuristic Feel */
+        .parallax {
+            background-image: linear-gradient(rgba(11, 25, 44, 0.85), rgba(11, 25, 44, 0.9)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920');
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+        }
+        .navy-gradient {
+            background: linear-gradient(135deg, #0B192C 0%, #1E3E62 100%);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0B192C; }
+        ::-webkit-scrollbar-thumb { background: #FFD700; border-radius: 5px; }
+        
+        /* Preloader Styles */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0B192C; z-index: 9999; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid #1E3E62;
+            border-top: 5px solid #FFD700; border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-modernGray text-navy-dark dark:bg-navy-dark dark:text-gray-100 transition-colors duration-300 antialiased font-sans">
+
+    <!-- LOADING ANIMATION -->
+    <div id="preloader">
+        <div class="spinner mb-4"></div>
+        <h2 class="font-serif text-white text-xl tracking-widest animate-pulse">MEMUAT ARSIP DIGITAL...</h2>
+    </div>
+
+    <!-- BACKGROUND MUSIC HANDLER (Hidden Audio) -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- SCROLL PROGRESS INDICATOR -->
+    <div class="fixed top-0 left-0 w-full h-1.5 z-50 bg-gray-300 dark:bg-navy-light">
+        <div id="progressBar" class="h-full gold-gradient w-0 transition-all duration-100"></div>
+    </div>
+
+    <!-- STICKY NAVBAR -->
+    <nav class="sticky top-0 z-40 bg-navy text-white shadow-xl border-b border-gold border-opacity-20 backdrop-blur-md bg-opacity-95">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg gold-gradient flex items-center justify-center text-navy font-bold text-xl shadow-lg">H</div>
+                    <span class="font-serif font-bold text-lg tracking-wider hidden sm:block">HABIBIE & REFORMASI</span>
+                </div>
+                
+                <!-- Search Bar di Navbar -->
+                <div class="hidden md:flex items-center relative w-64 mx-4">
+                    <input type="text" id="searchInput" placeholder="Cari materi..." class="w-full bg-navy-light border border-gray-600 rounded-full py-1.5 pl-4 pr-10 text-sm focus:outline-none focus:border-gold text-white">
+                    <i class="fas fa-search absolute right-3 text-gray-400"></i>
+                </div>
+
+                <!-- Nav Menu & Kontrol -->
+                <div class="flex items-center space-x-6">
+                    <!-- Music Toggle -->
+                    <button onclick="toggleMusic()" id="musicBtn" class="text-gray-300 hover:text-gold transition">
+                        <i class="fas fa-volume-mute text-lg"></i>
+                    </button>
+                    <!-- Dark Mode Toggle -->
+                    <button onclick="toggleDarkMode()" class="text-gray-300 hover:text-gold transition">
+                        <i class="fas fa-moon text-lg dark:hidden"></i>
+                        <i class="fas fa-sun text-lg hidden dark:block"></i>
+                    </button>
+                    <a href="#quiz" class="hidden sm:inline-block bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-navy px-4 py-2 rounded-full font-semibold text-xs tracking-wider uppercase transition duration-300 shadow-md">Mulai Kuis</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION (WITH PARALLAX EFFECT) -->
+    <header class="parallax relative min-h-screen flex items-center justify-center text-center text-white px-4 overflow-hidden">
+        <div class="absolute inset-0 bg-navy-dark opacity-40 z-0"></div>
+        <div class="relative z-10 max-w-4xl mx-auto" data-aos="fade-up" data-aos-duration="1500">
+            <span class="text-gold font-semibold tracking-widest text-sm uppercase block mb-3 font-montserrat">Portal Edukasi Sejarah Premium</span>
+            <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6 leading-tight">
+                Era Pemerintahan <br><span class="text-transparent bg-clip-text gold-gradient">Presiden B.J. Habibie</span>
+            </h1>
+            
+            <!-- Quote Card Inspiratif -->
+            <div class="bg-navy bg-opacity-80 border-l-4 border-gold p-6 rounded-r-xl max-w-2xl mx-auto my-8 shadow-2xl backdrop-blur-sm">
+                <p class="font-serif italic text-lg text-gray-200">
+                    "Masa depan Indonesia ditentukan oleh penguasaan ilmu pengetahuan dan teknologi yang berakar pada nilai-nilai budaya dan keimanan."
+                </p>
+                <span class="block mt-3 text-gold font-semibold text-sm tracking-wider">— Prof. Dr. Ing. B.J. Habibie</span>
+            </div>
+            
+            <a href="#sejarah" class="inline-block bg-gradient-to-r from-gold via-yellow-400 to-gold-dark text-navy font-bold px-8 py-3.5 rounded-full shadow-lg hover:scale-105 transition duration-300 tracking-wider text-sm uppercase font-montserrat">
+                Eksplorasi Sejarah <i class="fas fa-arrow-down ml-2 animate-bounce"></i>
+            </a>
+        </div>
+        
+        <!-- Floating Cyber Indicator -->
+        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gold opacity-60 text-xs tracking-widest animate-pulse uppercase">
+            Gunakan Scroll Untuk Menjelajah
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE HUB -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-32">
+
+        <!-- 1. SEJARAH REFORMASI -->
+        <section id="sejarah" class="searchable" data-aos="fade-up">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mb-4">Sejarah Reformasi</h2>
+                <div class="w-24 h-1 gold-gradient mx-auto rounded-full"></div>
+                <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Sejarah reformasi Indonesia merupakan salah satu tonggak penting dalam perjalanan bangsa. Reformasi bukan sekadar perubahan politik, melainkan transformasi menyeluruh dalam kehidupan bernegara, pemerintahan, hukum, dan sosial.</p>
+                <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Gerakan reformasi Indonesia yang memuncak pada tahun 1998 menandai berakhirnya rezim Orde Baru yang dipimpin oleh Presiden Soeharto selama lebih dari 32 tahun.
+Krisis ekonomi, korupsi yang merajalela, serta tuntutan demokrasi dari rakyat menjadi pendorong utama lahirnya era baru yaitu Era Reformasi.</p>
+                <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Untuk memahami sejarah reformasi Indonesia, perlu ditelusuri kondisi sosial, ekonomi, dan politik pada masa akhir pemerintahan Orde Baru. Pada pertengahan 1990-an, Indonesia mengalami pertumbuhan ekonomi pesat. Namun, di balik kemajuan itu, terjadi ketimpangan sosial, kolusi, dan korupsi di berbagai lapisan pemerintahan.
+.</p>
+                <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Ketika krisis moneter Asia melanda tahun 1997, nilai tukar rupiah jatuh drastis, harga kebutuhan pokok melonjak, dan pengangguran meningkat.
+Situasi ini memperburuk kepercayaan rakyat terhadap pemerintahan Soeharto.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Krisis Moneter Card -->
+                <div class="bg-white dark:bg-navy-light p-8 rounded-2xl shadow-xl border-t-4 border-red-500 hover:-translate-y-2 transition duration-300">
+                    <div class="w-12 h-12 bg-red-100 dark:bg-red-950 rounded-xl flex items-center justify-center text-red-500 text-2xl mb-6">
+                        <i class="fas fa-chart-line-down"></i>
+                    </div>
+                    <h3 class="font-montserrat font-bold text-xl mb-3">Krisis Politik</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">Rakyat menuntut pergantian kepemimpinan nasional.</p>
+                </div>
+                <!-- Demonstrasi Mahasiswa Card -->
+                <div class="bg-white dark:bg-navy-light p-8 rounded-2xl shadow-xl border-t-4 border-gold hover:-translate-y-2 transition duration-300">
+                    <div class="w-12 h-12 bg-amber-100 dark:bg-yellow-950 rounded-xl flex items-center justify-center text-gold text-2xl mb-6">
+                        <i class="fas fa-users-rays"></i>
+                    </div>
+                    <h3 class="font-montserrat font-bold text-xl mb-3">Krisis hukum</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">Banyak pelanggaran HAM dan kebebasan pers dibatasi.</p>
+                </div>
+                <!-- Jatuhnya Orba Card -->
+                <div class="bg-white dark:bg-navy-light p-8 rounded-2xl shadow-xl border-t-4 border-navy-light dark:border-white hover:-translate-y-2 transition duration-300">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-navy rounded-xl flex items-center justify-center text-navy-light dark:text-white text-2xl mb-6">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <h3 class="font-montserrat font-bold text-xl mb-3">Krisis sosial</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">Muncul konflik dan ketegangan antar-etnis.</p>
+                </div>
+            </div>
+            <section id="sejarah" class="searchable" data-aos="fade-up">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+            <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Semua faktor tersebut menjadi bahan bakar bagi lahirnya gerakan reformasi nasional.</p>
+    
+        </section>
+
+        <!-- MAIN INTERACTIVE HUB -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-32">
+
+        <!-- 2. kondisi ekonomi -->
+        <section id="ekonomi" class="searchable" data-aos="fade-up">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mb-4">Kondisi Ekonomi 1998</h2>
+                <div class="w-24 h-1 gold-gradient mx-auto rounded-full"></div>
+                <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Indonesia pernah mengalami sejarah yang cukup kelam dalam sistem perekonomian yang cukup membekas sampai saat ini yang tidak hanya berdampak pada sektor keuangan dan perekonomian, tetapi juga memicu gejolak sosial dan politik yang cukup besar dan paling berdampak bagi masyarakatnya. Krisis Moneter 1998 menjadi salah satu peristiwa paling bersejarah dalam bidang ekonomi dan politik di Indonesia. Krisis yang bermula dari anjloknya nilai rupiah terhadap dolar AS ini bukan hanya mengguncang stabilitas ekonomi nasional, tetapi juga menggoyahkan sendi-sendi pemerintahan Orde Baru. Secara Internal, perekonomian Indonesia rentan terhadap guncangan karena lemahnya sistem perbankan serta tingginya utang luar negeri. Akibatnya, Presiden Soeharto yang telah berkuasa selama lebih dari tiga dekade akhirnya harus lengser dari jabatannya pada Bulan Mei Tahun 1998.</p>
+            </div>
+             <!-- MAIN INTERACTIVE HUB -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-32">
+
+        <!-- 2. kondisi politik -->
+        <section id="politik" class="searchable" data-aos="fade-up">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mb-4">Kondisi Politik 1998</h2>
+                <div class="w-24 h-1 gold-gradient mx-auto rounded-full"></div>
+                <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Krisis moneter tidak hanya menghancurkan perekonomian, tetapi juga mengguncang legitimasi politik Presiden Soeharto. Kepercayaan masyarakat terhadap pemerintah menurun drastis. Gerakan mahasiswa dan masyarakat menuntut reformasi besar-besaran, menuntut diakhirinya praktik KKN, serta menuntut Soeharto untuk mundur.
+</p>
+
+                <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Puncaknya terjadi pada 21 Mei 1998, ketika Soeharto secara resmi mengundurkan diri dari jabatannya setelah 32 tahun berkuasa. Peristiwa ini menandai berakhirnya era Orde Baru dan lahirnya Era Reformasi, yang membawa perubahan besar dalam sistem politik, ekonomi, dan demokrasi Indonesia. Krisis Moneter 1998 menjadi titik balik penting dalam sejarah bangsa. Dari krisis inilah Indonesia belajar tentang pentingnya transparansi ekonomi, pengawasan sistem keuangan, serta perlunya pemerintahan yang bersih dari korupsi. Meski menyakitkan, krisis ini membuka jalan menuju reformasi yang memperkuat demokrasi dan menata kembali perekonomian nasional
+            </div>
+
+        <!-- 3. TIMELINE PERISTIWA (VERTICAL MODERN) -->
+        <section id="timeline" class="searchable" data-aos="fade-up">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mb-4">Timeline Peristiwa Reformasi 1998</h2>
+                <div class="w-24 h-1 gold-gradient mx-auto rounded-full"></div>
+            </div>
+
+            <div class="relative border-l-2 border-gold border-opacity-40 max-w-3xl mx-auto pl-8 space-y-12">
+                <!-- Item 1 -->
+                <div class="relative" data-aos="fade-left">
+                    <div class="absolute -left-[41px] top-0 w-5 h-5 rounded-full gold-gradient border-4 border-white dark:border-navy-dark"></div>
+                    <span class="font-montserrat font-bold text-gold text-lg">10 Mei 1998</span>
+                    <h4 class="font-bold text-xl mt-1">Pembentukan Kabinet Pembangunan VIII</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">Kemarahan rakyat tersulut karena ketidakpuasan hasil Pemilu, lalu pada 10 Mei 1998 terjadi pembentukan Kabinet Pembangunan VIII. Susunan kabinet tersebut dinilai masyarakat masih sangat lekat dengan ciri korupsi, kolusi, dan nepotisme (KKN).</p>
+                </div>
+                <!-- Item 2 -->
+                <div class="relative" data-aos="fade-left">
+                    <div class="absolute -left-[41px] top-0 w-5 h-5 rounded-full gold-gradient border-4 border-white dark:border-navy-dark"></div>
+                    <span class="font-montserrat font-bold text-gold text-lg">11 Mei 1998</span>
+                    <h4 class="font-bold text-xl mt-1 text-red-500">Pembentukan Majelis Kepemimpinan Rakyat</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">Amien Rais mengumumkan Majelis Kepemimpinan Rakyat. Majelis itu terdiri dari 30 hingga 40 tokoh masyarakat dari berbagai elemen, bakal terbentuk pada akhir Mei 1998 guna menuntut reformasi. Ia juga menyerukan kepada ABRI untuk tidak melakukan cara-cara kekerasan terhadap para mahasiswa yang berunjuk rasa</p>
+                </div>
+                <!-- Item 3 -->
+                <div class="relative" data-aos="fade-left">
+                    <div class="absolute -left-[41px] top-0 w-5 h-5 rounded-full gold-gradient border-4 border-white dark:border-navy-dark"></div>
+                    <span class="font-montserrat font-bold text-gold text-lg">13 – 14 Mei 1998</span>
+                    <h4 class="font-bold text-xl mt-1 text-green-500">Kerusuhan Mei 1998</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">Tragedi Trisakti membuat masyarakat marah, terjadi kerusuhan massa besar-besaran di Jakarta dan sekitarnya. Kerusuhan ini mengakibatkan kegiatan perekonomian masyarakat lumpuh.
+
+Dalam kerusuhan terjadi juga penjarahan ratusan toko dan pusat perbelanjaan. Ribuan orang menjadi korban meninggal akibat kebakaran tersebut.
+
+Pada saat kerusuhan terjadi, Presiden Soeharto tidak di tanah air karena tengah menghadiri KTT G-15 di Kairo, Mesir.</p>
+                </div>
+            </div>
+        </section>
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-32">
+       <section id="tokoh" class="searchable" data-aos="fade-up">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="font-serif text-3xl sm:text-5xl font-bold mb-4">Tokoh Penggerak Reformasi</h2>
+        <div class="w-24 h-1 gold-gradient mx-auto rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="group relative bg-white dark:bg-navy-light rounded-2xl overflow-hidden shadow-xl transition-all duration-300 border border-transparent hover:border-gold">
+            <div class="h-48 overflow-hidden bg-gradient-to-br from-navy to-navy-light">
+                <img src="images/amien.jpg" alt="Amien Rais" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+            </div>
+            <div class="p-6">
+                <h4 class="font-montserrat font-bold text-lg">Amien Rais</h4>
+                <span class="text-xs text-gold font-medium tracking-widest block mb-3 uppercase">Lokomotif Gerakan</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Tokoh utama Muhammadiyah yang vokal mengonsolidasikan elemen masyarakat sipil.</p>
+            </div>
+        </div>
+
+        <div class="group relative bg-white dark:bg-navy-light rounded-2xl overflow-hidden shadow-xl transition-all duration-300 border border-transparent hover:border-gold">
+            <div class="h-48 overflow-hidden bg-gradient-to-br from-navy to-navy-light">
+                <img src="images/Megawati.jpg" alt="Megawati Soekarnoputri" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+            </div>
+            <div class="p-6">
+                <h4 class="font-montserrat font-bold text-lg">Megawati Soekarnoputri</h4>
+                <span class="text-xs text-gold font-medium tracking-widest block mb-3 uppercase">Simbol Perlawanan</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Figur sentral PDI Perjuangan yang merepresentasikan perlawanan politik massa.</p>
+            </div>
+        </div>
+
+        <div class="group relative bg-white dark:bg-navy-light rounded-2xl overflow-hidden shadow-xl transition-all duration-300 border border-transparent hover:border-gold">
+            <div class="h-48 overflow-hidden bg-gradient-to-br from-navy to-navy-light">
+                <img src="images/Gusdur.jpg" alt="Gus Dur" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+            </div>
+            <div class="p-6">
+                <h4 class="font-montserrat font-bold text-lg">Gus Dur (Abdurrahman Wahid)</h4>
+                <span class="text-xs text-gold font-medium tracking-widest block mb-3 uppercase">Guru Bangsa</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Ketua Umum PBNU yang konsisten menjaga harmoni sosial serta pluralisme nasional.</p>
+            </div>
+        </div>
+
+        <div class="group relative bg-white dark:bg-navy-light rounded-2xl overflow-hidden shadow-xl transition-all duration-300 border border-transparent hover:border-gold">
+            <div class="h-48 overflow-hidden bg-gradient-to-br from-navy to-navy-light">
+                <img src="images/kubuwanax.jpg" alt="B.J. Habibie" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+            </div>
+            <div class="p-6">
+                <h4 class="font-montserrat font-bold text-lg">Hamengkubuwana X</h4>
+                <span class="text-xs text-gold font-medium tracking-widest block mb-3 uppercase">Penjaga Stabilitas Nasional</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Sri Sultan Hamengkubuwono X memiliki peran penting dalam menjaga stabilitas Yogyakarta dan memberikan dukungan moral terhadap gerakan reformasi.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 6. PROF B.J. HABIBIE (BIOGRAPHY & FACT) -->
+<section id="profil" class="searchable" data-aos="fade-up">
+    <div class="bg-navy text-white rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-3">
+        <div class="p-12 bg-gradient-to-br from-navy-light to-navy flex flex-col justify-center text-center border-b lg:border-b-0 lg:border-r border-gold border-opacity-20">
+            
+            <!-- SEBELUMNYA: <div class="w-36 h-36 bg-white rounded-full ...">👴</div> -->
+            <!-- SEKARANG: Diubah menjadi pembungkus foto lingkaran yang rapi -->
+            <div class="w-36 h-36 bg-white rounded-full mx-auto mb-6 overflow-hidden shadow-xl border-2 border-gold border-opacity-30">
+                <img src="images/Habibi.jpg" alt="Prof. B.J. Habibie" class="w-full h-full object-cover">
+            </div>
+            
+            <h3 class="font-serif text-2xl font-bold">Prof. Dr. Ing. H. B.J. Habibie</h3>
+            <p class="text-gold text-xs tracking-widest mt-2 uppercase">Bapak Teknologi Indonesia</p>
+        </div>
+        <div class="p-8 lg:p-12 lg:col-span-2 space-y-6 flex flex-col justify-center">
+            <h4 class="font-montserrat font-bold text-xl text-gold border-b border-gray-700 pb-2">Jejak Langkah & Inspirasi Teknokrat</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-300">
+                <div>
+                    <h5 class="font-bold text-white mb-1"><i class="fas fa-graduation-cap text-gold mr-2"></i> Biografi</h5>
+                    <p>Bacharuddin Jusuf Habibie atau B.J. Habibie lahir di Pare-Pare, Sulawesi Selatan, pada 25 Juni 1936. la merupakan Presiden ke-3 Indonesia dan Wakil Presiden ke-7 RI. Sejak kecil, Habibie dikenal cerdas dan sangat tertarik pada ilmu pengetahuan serta teknologi, khususnya fisika.</p>
+                </div>
+                <div>
+                   
+                    <p>Setelah sempat kuliah di Teknik Mesin ITB, ia melanjutkan pendidikan ke Jerman pada tahun 1955 di RWTH Aachen. Dengan dukungan ibunya, R.A. Tuti Marini Puspowardoyo, Habibie berhasil menyelesaikan pendidikan S-1 hingga S-3 di Jerman selama sekitar 10 tahun. Pada tahun 1962, ia menikah dengan teman SMA-nya, Hasri Ainun Besari</p>
+                </div>
+            </div>
+            <div class="bg-navy-dark p-4 rounded-xl border border-gold border-opacity-10 text-xs italic text-center text-gray-400">
+                "Fakta Menarik: Pesawat N-250 Gatotkaca buatan IPTN berhasil terbang perdana pada tahun 1995 tanpa bantuan komputer modern!"
+            </div>
+        </div>
+    </div>
+</section>
+            <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="font-serif text-3xl sm:text-5xl font-bold mb-4">Masa Pemerintahan B.J. Habibie</h2>
+                <div class="w-24 h-1 gold-gradient mx-auto rounded-full"></div>
+                <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Setelah Presiden Soeharto lengser pada 20 Mei 1998, Bacharuddin Jusuf Habibie yang saat itu menjabat sebagai Wakil Presiden diangkat menjadi Presiden Indonesia. Pada masa pemerintahannya, Indonesia sedang mengalami krisis ekonomi yang sangat parah. Nilai rupiah melemah, inflasi meningkat, banyak bank mengalami kebangkrutan, dan kepercayaan masyarakat terhadap pemerintah menurun. Untuk mengatasi kondisi tersebut, pemerintahan B.J. Habibie melakukan berbagai reformasi ekonomi di bidang moneter, perbankan, fiskal, dan korporasi.
+<p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Di bidang moneter, pemerintah mengendalikan jumlah uang beredar, menaikkan suku bunga Sertifikat Bank Indonesia hingga 70%, serta menerapkan bank sentral independen untuk menstabilkan perekonomian. Di bidang perbankan, pemerintah menerbitkan obligasi sebesar Rp650 triliun untuk menyelamatkan perbankan nasional, menutup 38 bank bermasalah, dan mengambil alih tujuh bank lainnya. Sementara itu, di bidang fiskal pemerintah membatalkan sejumlah proyek infrastruktur, menghentikan perlakuan khusus terhadap mobil nasional, serta membiayai program Jaring Pengaman Sosial untuk membantu masyarakat yang terdampak krisis. Pada bidang korporasi, pemerintah melakukan restrukturisasi utang swasta melalui INDRA dan Prakarsa Jakarta serta mengurangi praktik monopoli oleh Bulog dan Pertamina.
+            
+             <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Meskipun situasi politik dan keamanan saat itu tidak menentu, pemerintah tetap mengambil keputusan dengan cepat walaupun berisiko tinggi. Kebijakan tersebut akhirnya membawa dampak positif bagi Indonesia, seperti membaiknya pertumbuhan ekonomi dari -13% menjadi 2% dan turunnya inflasi dari 77,6% menjadi 2%. Reformasi ekonomi pada masa pemerintahan B.J. Habibie menjadi langkah penting dalam proses pemulihan Indonesia setelah krisis ekonomi 1998.
+</p>
+ <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-32"></main>
+       <!-- 4 & 5. EKONOMI & POLITIK (COMBINED EXPANDED DATA) -->
+<section id="kebijakan" class="grid grid-cols-1 lg:grid-cols-2 gap-12 searchable" data-aos="fade-up">
+    <!-- Ekonomi Section -->
+    <!-- PERUBAHAN: p-8 diubah menjadi py-6 px-8 agar tinggi kotak menyusut -->
+    <div class="bg-white dark:bg-navy-light py-6 px-8 rounded-3xl shadow-xl border-l-8 border-gold flex flex-col justify-between">
+        <div>
+            <h3 class="font-serif text-2xl sm:text-3xl font-bold mb-4"><i class="fas fa-wallet text-gold mr-3"></i> Restrukturisasi Ekonomi</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+                Di tengah kepungan inflasi, Habibie melakukan langkah spektakuler yang diakui dunia internasional dalam menstabilkan perekonomian mikro dan makro.
+            </p>
+            <!-- Mini Stats Infografis -->
+            <div class="grid grid-cols-2 gap-4 bg-modernGray dark:bg-navy p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div>
+                    <span class="text-xs text-gray-500 block">Dolar AS (Puncak Krisis)</span>
+                    <span class="text-xl font-bold text-red-500 font-montserrat">Rp 16.800</span>
+                </div>
+                <div>
+                    <span class="text-xs text-gray-500 block">Dolar AS (Era Habibie)</span>
+                    <span class="text-xl font-bold text-green-500 font-montserrat">Rp 6.500</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PERUBAHAN: Ditambahkan grid sm:grid-cols-2 agar list tidak memanjang ke bawah -->
+        <ul class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm border-t border-gray-100 dark:border-gray-700 pt-4">
+            <li class="flex items-start"><i class="fas fa-check-circle text-gold mr-2 mt-1 flex-shrink-0"></i> <span>Independensi BI ditegakkan penuh (UU No. 23/1999).</span></li>
+            <li class="flex items-start"><i class="fas fa-check-circle text-gold mr-2 mt-1 flex-shrink-0"></i> <span>Pembentukan Badan Penyehatan Perbankan Nasional (BPPN).</span></li>
+            <li class="flex items-start sm:col-span-2"><i class="fas fa-check-circle text-gold mr-2 mt-1 flex-shrink-0"></i> <span>Melikuidasi sejumlah bank sistemik yang bermasalah.</span></li>
+        </ul>
+    </div>
+
+    <!-- Politik Section -->
+    <!-- PERUBAHAN: p-8 diubah menjadi py-6 px-8 agar tinggi kotak menyusut -->
+    <div class="bg-white dark:bg-navy-light py-6 px-8 rounded-3xl shadow-xl border-l-8 border-blue-500 flex flex-col justify-between">
+        <div>
+            <h3 class="font-serif text-2xl sm:text-3xl font-bold mb-4"><i class="fas fa-gavel text-blue-500 mr-3"></i>Demokratisasi Politik</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+                Keran kebebasan yang tersumbat selama tiga dekade dibuka lebar-lebar demi mewujudkan iklim demokrasi konstitusional yang sehat.
+            </p>
+            <!-- Mini Infografis Icon Grid -->
+            <div class="grid grid-cols-3 gap-2 text-center text-xs font-semibold">
+                <div class="p-3 bg-blue-50 dark:bg-navy rounded-lg text-blue-500"><i class="fas fa-newspaper text-xl block mb-1"></i> Kebebasan Pers</div>
+                <div class="p-3 bg-blue-50 dark:bg-navy rounded-lg text-blue-500"><i class="fas fa-layer-group text-xl block mb-1"></i> 48 Parpol</div>
+                <div class="p-3 bg-blue-50 dark:bg-navy rounded-lg text-blue-500"><i class="fas fa-box-archive text-xl block mb-1"></i> Pemilu 1999</div>
+            </div>
+        </div>
+        
+        <!-- PERUBAHAN: Ditambahkan grid sm:grid-cols-2 agar list tidak memanjang ke bawah -->
+        <ul class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm border-t border-gray-100 dark:border-gray-700 pt-4">
+            <li class="flex items-start"><i class="fas fa-check-circle text-blue-500 mr-2 mt-1 flex-shrink-0"></i> <span>UU Pers No. 40/1999 disahkan (Bebas Bredel).</span></li>
+            <li class="flex items-start"><i class="fas fa-check-circle text-blue-500 mr-2 mt-1 flex-shrink-0"></i> <span>Pembebasan Napol (Tahanan Politik) era Orde Baru.</span></li>
+            <li class="flex items-start sm:col-span-2"><i class="fas fa-check-circle text-blue-500 mr-2 mt-1 flex-shrink-0"></i> <span>Pembatasan Masa Jabatan Presiden (Maksimal 2 Periode).</span></li>
+        </ul>
+    </div>
+</section>
+
+         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-32"></main>
+                 <!-- 8. MUNDURNYA B.J. HABIBIE (DRAMATIC SECTION) -->
+        <section id="mundur" class="bg-gradient-to-r from-red-950 to-navy text-white p-8 sm:p-12 rounded-3xl shadow-2xl relative overflow-hidden searchable" data-aos="fade-up">
+            <div class="absolute right-0 bottom-0 opacity-10 text-9xl font-bold font-serif selection:bg-transparent pointer-events-none">1999</div>
+            <div class="max-w-2xl relative z-10">
+                <span class="text-red-400 text-xs tracking-widest font-bold uppercase block mb-2">Titik Balik Sejarah</span>
+                <h3 class="font-serif text-3xl sm:text-4xl font-bold mb-4">Akhir Jabatan B.J Habibi</h3>
+                <p class="text-sm text-gray-300 leading-relaxed mb-6">
+                   Akhir masa jabatan Bacharuddin Jusuf Habibie terjadi setelah Sidang Umum MPR tahun 1999. Pada sidang tersebut, Habibie menyampaikan pidato pertanggungjawaban mengenai kinerjanya selama menjadi presiden. Namun, laporan pertanggungjawaban itu ditolak oleh MPR karena banyak anggota MPR yang menilai kebijakan dan langkah pemerintahannya masih menimbulkan kontroversi, termasuk masalah referendum Timor Timur yang berujung pada lepasnya wilayah tersebut dari Indonesia. Setelah pidatonya ditolak, B.J. Habibie memutuskan untuk tidak mencalonkan diri kembali sebagai presiden pada pemilu tahun 1999. Akhirnya, jabatan presiden digantikan oleh Abdurrahman Wahid atau Gus Dur yang terpilih sebagai Presiden Indonesia keempat.
+                
+                </p>
+            </div>
+        </section>
+ <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-32"></main>
+
+        
+    
+ <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-32"></main>
+
+        <!-- 9. YANG DAPAT DIPELAJARI -->
+        <section id="hikmah" class="searchable" data-aos="fade-up">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mb-4">Nilai yang Dapat Dipelajari Dari Reformasi</h2>
+                <div class="w-24 h-1 gold-gradient mx-auto rounded-full"></div>
+            </div>
+   <section id="ekonomi" class="searchable" data-aos="fade-up">
+            
+                <p class="text-gray-500 dark:text-gray-400 mt-4 text-lg">Masa Reformasi memberikan banyak pelajaran penting bagi bangsa Indonesia. Salah satu nilai yang dapat dipelajari adalah pentingnya demokrasi dan kebebasan berpendapat. Pada masa reformasi, mahasiswa dan masyarakat berani menyampaikan aspirasi serta kritik terhadap pemerintah demi terciptanya perubahan yang lebih baik. Selain itu, reformasi juga mengajarkan pentingnya pemerintahan yang jujur, bersih, dan bebas dari praktik korupsi, kolusi, dan nepotisme (KKN).</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white dark:bg-navy-light p-6 rounded-2xl shadow-md flex items-start space-x-4">
+                    <div class="text-gold text-2xl"><i class="fas fa-heart"></i></div>
+                    <div>
+                        <h4 class="font-bold text-md mb-1">Nilai Persatuan</h4>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Nilai lainnya adalah semangat persatuan dan kepedulian terhadap kondisi bangsa. Walaupun masyarakat berasal dari latar belakang yang berbeda, mereka tetap bersatu untuk memperjuangkan keadilan dan perbaikan negara. Masa reformasi juga mengajarkan bahwa rakyat memiliki peran penting dalam mengawasi jalannya pemerintahan agar kekuasaan tidak disalahgunakan.</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-navy-light p-6 rounded-2xl shadow-md flex items-start space-x-4">
+                    <div class="text-gold text-2xl"><i class="fas fa-lightbulb"></i></div>
+                    <div>
+                        <h4 class="font-bold text-md mb-1">Pentingnya HAM </h4>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Selain itu, reformasi memberikan pelajaran tentang pentingnya menghormati hak asasi manusia, kebebasan pers, dan keterbukaan informasi. Dari peristiwa reformasi, bangsa Indonesia belajar bahwa perubahan dapat terjadi jika masyarakat memiliki keberanian, kerja sama, dan rasa tanggung jawab terhadap masa depan negara. Oleh karena itu, semangat reformasi harus terus dijaga agar Indonesia menjadi negara yang lebih demokratis, adil, dan sejahtera.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. GALERI DOKUMENTER (WITH EMBED VIDEO & LIGHTBOX PLACEHOLDERS) -->
+        <section id="galeri" data-aos="fade-up">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mb-4">Galeri Dokumenter</h2>
+                <div class="w-24 h-1 gold-gradient mx-auto rounded-full"></div>
+            </div>
+
+            <!-- YouTube Video Embed Interaktif -->
+           
+            <!-- Grid Photo Items -->
+           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    
+    <div class="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer aspect-square bg-navy" onclick="openLightbox('Arsip Sidang Istimewa 1998')">
+        <img src="images/MPR 1998.jpg" alt="Sidang SI MPR" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+        <div class="absolute inset-x-0 bottom-0 bg-navy bg-opacity-80 p-2 text-center text-xs text-white opacity-0 group-hover:opacity-100 transition">Sidang SI MPR</div>
+    </div>
+
+    <div class="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer aspect-square bg-navy" onclick="openLightbox('Aksi Demonstrasi Massa Kampus')">
+        <img src="images/Grebek.jpg" alt="Aksi Mahasiswa" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+        <div class="absolute inset-x-0 bottom-0 bg-navy bg-opacity-80 p-2 text-center text-xs text-white opacity-0 group-hover:opacity-100 transition">Aksi Mahasiswa</div>
+    </div>
+
+    <div class="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer aspect-square bg-navy" onclick="openLightbox('Pelantikan Presiden Ketiga RI')">
+        <img src="images/Lantik.jpg" alt="Sumpah Jabatan" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+        <div class="absolute inset-x-0 bottom-0 bg-navy bg-opacity-80 p-2 text-center text-xs text-white opacity-0 group-hover:opacity-100 transition">Sumpah Jabatan</div>
+    </div>
+
+    <div class="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer aspect-square bg-navy" onclick="openLightbox('Pengunduran Diri Soeharto')">
+        <img src="images/Lengser.jpg" alt="Pesawat N-250" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+        <div class="absolute inset-x-0 bottom-0 bg-navy bg-opacity-80 p-2 text-center text-xs text-white opacity-0 group-hover:opacity-100 transition">Pengunduran Diri Soeharto</div>
+    </div>
+
+            </div>
+            <div id="lightbox" class="fixed inset-0 bg-navy-dark bg-opacity-95 z-50 hidden flex flex-col justify-center items-center p-4">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-3xl hover:text-gold"><i class="fas fa-times"></i></button>
+    
+    <img id="lightboxImg" src="" alt="Preview" class="max-w-full max-h-[70vh] rounded-2xl shadow-2xl border border-gold object-contain mb-4">
+    
+    <p id="lightboxCaption" class="text-white font-serif font-bold tracking-wide text-lg text-center"></p>
+</div>
+        </section>
+
+ <!-- Grid Photo Items -->
+           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    
+    <div class="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer aspect-square bg-navy" onclick="openLightbox('Peristiwa Trisakti 1998')">
+        <img src="images/trisakti.jpg" alt="Sidang SI MPR" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+        <div class="absolute inset-x-0 bottom-0 bg-navy bg-opacity-80 p-2 text-center text-xs text-white opacity-0 group-hover:opacity-100 transition">Peristiwa Trisakti 1998</div>
+    </div>
+
+    <div class="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer aspect-square bg-navy" onclick="openLightbox('Pembentukan Kabinet Pembangunan VIII')">
+        <img src="images/Kabinet.jpg" alt="Aksi Mahasiswa" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+        <div class="absolute inset-x-0 bottom-0 bg-navy bg-opacity-80 p-2 text-center text-xs text-white opacity-0 group-hover:opacity-100 transition">Pembentukan Kabinet Pembangunan VIII</div>
+    </div>
+
+    <div class="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer aspect-square bg-navy" onclick="openLightbox('Kerusuhan 1998')">
+        <img src="images/Rusuh.jpg" alt="Kerusuhan 1998" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+        <div class="absolute inset-x-0 bottom-0 bg-navy bg-opacity-80 p-2 text-center text-xs text-white opacity-0 group-hover:opacity-100 transition">Kerusuhan 1998</div>
+    </div>
+
+    <div class="group relative overflow-hidden rounded-xl shadow-lg cursor-pointer aspect-square bg-navy" onclick="openLightbox('Demonstrasi Mahasiswa 1998')">
+        <img src="images/Demo.jpg" alt="Pesawat N-250" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+        <div class="absolute inset-x-0 bottom-0 bg-navy bg-opacity-80 p-2 text-center text-xs text-white opacity-0 group-hover:opacity-100 transition">Demonstrasi Mahasiswa 1998</div>
+    </div>
+
+            </div>
+            <div id="lightbox" class="fixed inset-0 bg-navy-dark bg-opacity-95 z-50 hidden flex flex-col justify-center items-center p-4">
+    <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-3xl hover:text-gold"><i class="fas fa-times"></i></button>
+    
+    <img id="lightboxImg" src="" alt="Preview" class="max-w-full max-h-[70vh] rounded-2xl shadow-2xl border border-gold object-contain mb-4">
+    
+    <p id="lightboxCaption" class="text-white font-serif font-bold tracking-wide text-lg text-center"></p>
+</div>
+        </section>
+
+       <section id="quiz" data-aos="fade-up" class="relative">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold mb-4">11. Evaluasi & Pemahaman Materi</h2>
+                <div class="w-24 h-1 gold-gradient mx-auto rounded-full"></div>
+            </div>
+
+            <div class="relative max-w-2xl mx-auto bg-white dark:bg-navy-light p-8 rounded-3xl shadow-2xl border border-gold border-opacity-20 min-h-[400px]">
+                
+                <div id="quizFeedbackModal" class="absolute inset-0 z-50 hidden flex items-center justify-center p-4 bg-navy bg-opacity-95 dark:bg-navy-dark dark:bg-opacity-95 backdrop-blur-sm rounded-3xl transition-all duration-300">
+                    <div id="modalContent" class="bg-white dark:bg-navy-light w-full max-w-md p-6 rounded-3xl shadow-2xl border flex flex-col items-center text-center transform scale-95 opacity-0 transition-all duration-300">
+                        <div id="modalIcon" class="w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-4 shadow-lg animate-bounce">
+                            🎉
+                        </div>
+                        <h3 id="modalTitle" class="font-serif text-2xl font-bold mb-2">Hebat!</h3>
+                        <p id="modalExplanation" class="text-sm text-gray-600 dark:text-gray-300 mb-6 leading-relaxed max-h-40 overflow-y-auto pr-1 w-full"></p>
+                        <button onclick="closeFeedbackModal()" id="modalBtn" class="w-full py-3 rounded-xl text-sm font-bold tracking-wider uppercase transition-all duration-200 shadow-md focus:outline-none">
+                            Lanjut Soal Berikutnya
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quizContainer">
+                    <div class="flex justify-between items-center mb-6">
+                        <span id="questionNum" class="text-xs font-mono font-bold text-gold uppercase bg-navy p-2 rounded-lg">Pertanyaan 1 / 10</span>
+                        <span id="scoreBadge" class="text-xs font-mono font-bold text-white bg-green-600 p-2 rounded-lg">Skor: 0</span>
+                    </div>
+                    <h3 id="questionText" class="font-montserrat font-bold text-lg mb-6 leading-relaxed text-gray-800 dark:text-white">Loading Soal...</h3>
+                    <div id="optionsBox" class="space-y-3">
+                        </div>
+                </div>
+
+                <div class="mt-12 border-t border-gray-200 dark:border-gray-700 pt-6">
+                    <h4 class="font-bold text-sm mb-3"><i class="fas fa-trophy text-gold mr-2"></i> Peringkat Simulasi Lokal</h4>
+                    <ol class="text-xs space-y-2 text-gray-500 dark:text-gray-400">
+                        <li class="flex justify-between bg-modernGray dark:bg-navy p-2 rounded"><span>1. Siswa Mandiri</span> <span>Skor: 100</span></li>
+                        <li class="flex justify-between bg-modernGray dark:bg-navy p-2 rounded"><span>2. Detektif Sejarah</span> <span>Skor: 50</span></li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="lightbox" class="fixed inset-0 bg-navy-dark bg-opacity-95 z-50 hidden flex flex-col justify-center items-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-3xl hover:text-gold"><i class="fas fa-times"></i></button>
+        <div class="w-64 h-64 bg-navy-light rounded-2xl flex items-center justify-center text-7xl text-gold mb-4 shadow-2xl border border-gold">🏛️</div>
+        <p id="lightboxCaption" class="text-white font-serif font-bold tracking-wide text-lg text-center"></p>
+    </div>
+
+    <button onclick="scrollToTop()" id="backToTop" class="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-gold text-navy shadow-2xl items-center justify-center hidden hover:scale-110 transition duration-200 z-40 font-bold">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <footer class="bg-navy text-gray-400 pt-16 pb-8 border-t border-gold border-opacity-10 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div>
+                <h4 class="font-serif text-white font-bold text-lg mb-4">Arsip Reformasi</h4>
+                <p class="text-xs leading-relaxed">Platform edukasi premium yang didesain secara independen sebagai rujukan interaktif sejarah transisi demokrasi kebangsaan Indonesia.</p>
+            </div>
+            <div>
+                <h4 class="font-serif text-white font-bold text-lg mb-4">Sumber Referensi Arsip</h4>
+                <ul class="text-xs space-y-2 font-mono">
+                    <li>&bull; Sekretariat Negara Republik Indonesia</li>
+                    <li>&bull; Arsip Nasional Republik Indonesia (ANRI)</li>
+                    <li>&bull; Ketetapan Sidang Istimewa MPR 1998</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-serif text-white font-bold text-lg mb-4">Kebijakan Penggunaan</h4>
+                <p class="text-xs leading-relaxed">Materi dapat disadur secara bebas dan didistribusikan secara transparan untuk kepentingan ruang kelas nonkomersial.</p>
+            </div>
+        </div>
+        <div class="text-center text-xs text-gray-600 border-t border-gray-800 pt-6">
+            &copy; 2026 Arsip Digital Nusantara. Bersama Mencerdaskan Kehidupan Bangsa.
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initiate Animate On Scroll
+        AOS.init({ once: true, duration: 800 });
+
+        // Remove Preloader
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            if(preloader) preloader.style.display = 'none';
+        });
+
+        // Dark/Light Mode Switcher
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // Background Music Handler
+        const music = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (!isPlaying) {
+                music.play().catch(e => console.log("Interaksi user dibutuhkan untuk memutar lagu otomatis."));
+                musicBtn.innerHTML = `<i class="fas fa-volume-up text-gold text-lg"></i>`;
+                isPlaying = true;
+            } else {
+                music.pause();
+                musicBtn.innerHTML = `<i class="fas fa-volume-mute text-gray-300 text-lg"></i>`;
+                isPlaying = false;
+            }
+        }
+
+        // Scroll Progress Bar & Back to Top Controller
+        window.onscroll = function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const progressBar = document.getElementById("progressBar");
+            if(progressBar) progressBar.style.width = scrolled + "%";
+
+            const btn = document.getElementById("backToTop");
+            if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+                btn.style.display = "flex";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Instant Live Client-side Local Search
+        const searchInput = document.getElementById('searchInput');
+        if(searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                const targets = document.querySelectorAll('.searchable');
+                
+                targets.forEach(target => {
+                    const text = target.innerText.toLowerCase();
+                    if(text.includes(query)) {
+                        target.style.display = "block";
+                    } else {
+                        target.style.display = "none";
+                    }
+                });
+            });
+        }
+
+        // Lightbox Image Display System
+        function openLightbox(caption) {
+            document.getElementById('lightboxCaption').innerText = caption;
+            document.getElementById('lightbox').classList.remove('hidden');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+        }
+
+        // DATABASE SOAL REFORMASI (10 SOAL)
+        const quizData = [
+            {
+                question: "Apa penyebab utama lahirnya Era Reformasi di Indonesia?",
+                options: [
+                    "A. Kemenangan Indonesia di bidang ekonomi",
+                    "B. Krisis ekonomi dan maraknya KKN",
+                    "C. Bertambahnya jumlah partai politik",
+                    "D. Kemajuan teknologi Indonesia"
+                ],
+                correct: 1,
+                explanation: "Reformasi terjadi karena krisis ekonomi 1997–1998 serta banyaknya praktik korupsi, kolusi, dan nepotisme (KKN) yang membuat rakyat kehilangan kepercayaan kepada pemerintah."
+            },
+            {
+                question: "Kapan Presiden Soeharto mengundurkan diri dari jabatannya?",
+                options: [
+                    "A. 10 Mei 1998",
+                    "B. 11 Mei 1998",
+                    "C. 21 Mei 1998",
+                    "D. 27 Juli 1998"
+                ],
+                correct: 2,
+                explanation: "Pada tanggal 21 Mei 1998, Soeharto resmi mengundurkan diri setelah memimpin Indonesia selama lebih dari 32 tahun."
+            },
+            {
+                question: "Siapa yang menggantikan Soeharto sebagai Presiden Indonesia?",
+                options: [
+                    "A. Megawati Soekarnoputri",
+                    "B. Amien Rais",
+                    "C. Gus Dur",
+                    "D. B.J. Habibie"
+                ],
+                correct: 3,
+                explanation: "Setelah Soeharto mundur, jabatan presiden digantikan oleh Bacharuddin Jusuf Habibie yang sebelumnya menjabat sebagai wakil presiden."
+            },
+            {
+                question: "Apa nama peristiwa yang menyebabkan empat mahasiswa meninggal dunia pada 12 Mei 1998?",
+                options: [
+                    "A. Peristiwa Malari",
+                    "B. Tragedi Semanggi",
+                    "C. Tragedi Trisakti",
+                    "D. Peristiwa Kudatuli"
+                ],
+                correct: 2,
+                explanation: "Tragedi Trisakti terjadi saat demonstrasi mahasiswa di Universitas Trisakti dan menewaskan empat mahasiswa akibat bentrokan dengan aparat."
+            },
+            {
+                question: "Berikut yang termasuk kebijakan ekonomi B.J. Habibie di bidang perbankan adalah …",
+                options: [
+                    "A. Membentuk Majelis Kepemimpinan Rakyat",
+                    "B. Menutup 38 bank bermasalah",
+                    "C. Mengadakan Pemilu 1997",
+                    "D. Membentuk Orde Baru"
+                ],
+                correct: 1,
+                explanation: "Pemerintahan B.J. Habibie melakukan reformasi perbankan dengan menutup bank-bank bermasalah untuk memperbaiki sistem keuangan nasional."
+            },
+            {
+                question: "Siapa tokoh reformasi yang dikenal sebagai simbol perlawanan politik terhadap Orde Baru?",
+                options: [
+                    "A. Sri Sultan Hamengkubuwono X",
+                    "B. Gus Dur",
+                    "C. Megawati Soekarnoputri",
+                    "D. B.J. Habibie"
+                ],
+                correct: 2,
+                explanation: "Megawati Soekarnoputri menjadi simbol perlawanan terhadap Orde Baru terutama setelah Peristiwa Kudatuli tahun 1996."
+            },
+            {
+                question: "Krisis moneter tahun 1998 bermula dari …",
+                options: [
+                    "A. Naiknya harga minyak dunia",
+                    "B. Jatuhnya nilai rupiah terhadap dolar AS",
+                    "C. Pergantian presiden Indonesia",
+                    "D. Konflik antarpartai politik"
+                ],
+                correct: 1,
+                explanation: "Nilai rupiah yang melemah drastis menyebabkan kondisi ekonomi Indonesia menjadi tidak stabil dan memicu krisis moneter."
+            },
+            {
+                question: "Di negara mana B.J. Habibie melanjutkan pendidikan tingginya?",
+                options: [
+                    "A. Jepang",
+                    "B. Inggris",
+                    "C. Amerika Serikat",
+                    "D. Jerman"
+                ],
+                correct: 3,
+                explanation: "Bacharuddin Jusuf Habibie melanjutkan pendidikan teknik di RWTH Aachen, Jerman."
+            },
+            {
+                question: "Apa tujuan utama gerakan reformasi tahun 1998?",
+                options: [
+                    "A. Memperpanjang masa jabatan presiden",
+                    "B. Menghapus sistem demokrasi",
+                    "C. Mewujudkan pemerintahan yang lebih demokratis dan bersih",
+                    "D. Membentuk pemerintahan militer"
+                ],
+                correct: 2,
+                explanation: "Gerakan reformasi bertujuan menciptakan pemerintahan yang bebas KKN, demokratis, dan menghormati hak rakyat."
+            },
+            {
+                question: "Salah satu nilai penting yang dapat dipelajari dari masa reformasi adalah …",
+                options: [
+                    "A. Membatasi kebebasan pers",
+                    "B. Mengutamakan kekuasaan pemerintah",
+                    "C. Pentingnya demokrasi dan kebebasan berpendapat",
+                    "D. Mengurangi peran masyarakat dalam pemerintahan"
+                ],
+                correct: 2,
+                explanation: "Reformasi mengajarkan bahwa masyarakat memiliki hak untuk menyampaikan pendapat dan ikut mengawasi jalannya pemerintahan."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function renderQuiz() {
+            if(currentQuestion >= quizData.length) {
+                const finalScore = Math.round((score / quizData.length) * 100);
+                document.getElementById('quizContainer').innerHTML = `
+                    <div class="text-center py-8 animate-fade-in">
+                        <i class="fas fa-award text-gold text-5xl mb-4 block"></i>
+                        <h4 class="font-serif font-bold text-2xl mb-2 text-gray-800 dark:text-white">Evaluasi Selesai!</h4>
+                        <p class="text-sm text-gray-500 mb-6">Akumulasi perolehan skor akhir Anda adalah: <strong class="text-green-500">${finalScore} / 100</strong></p>
+                        <button onclick="restartQuiz()" class="bg-navy dark:bg-navy-light text-white px-6 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase transition border border-gold hover:bg-gold hover:text-navy">Ulangi Ujian</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const data = quizData[currentQuestion];
+            document.getElementById('questionNum').innerText = `Pertanyaan ${currentQuestion + 1} / ${quizData.length}`;
+            document.getElementById('questionText').innerText = data.question;
+
+            const box = document.getElementById('optionsBox');
+            box.innerHTML = '';
+            
+            data.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 text-xs font-medium rounded-xl border border-gray-300 dark:border-gray-700 hover:bg-gold hover:text-navy dark:text-gray-200 dark:hover:text-navy transition duration-150 focus:outline-none";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx, data.correct, data.explanation);
+                box.appendChild(btn);
+            });
+        }
+
+        // PERBAIKAN LOGIKA: Menggunakan classList agar kelas "absolute" tidak terhapus otomatis oleh sistem warna
+        function checkAnswer(selected, correct, explanation) {
+            const modal = document.getElementById('quizFeedbackModal');
+            const content = document.getElementById('modalContent');
+            const icon = document.getElementById('modalIcon');
+            const title = document.getElementById('modalTitle');
+            const expText = document.getElementById('modalExplanation');
+            const btn = document.getElementById('modalBtn');
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+
+            if(selected === correct) {
+                score++;
+                const currentProgressScore = Math.round((score / quizData.length) * 100);
+                document.getElementById('scoreBadge').innerText = `Skor: ${currentProgressScore}`;
+                
+                // Set warna hijau untuk jawaban Benar tanpa menghapus struktur utama modal
+                content.className = "bg-white dark:bg-navy-light w-full max-w-md p-6 rounded-3xl shadow-2xl border-2 border-green-500 flex flex-col items-center text-center transform transition-all duration-300";
+                icon.innerText = "🎉";
+                icon.className = "w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl mb-4 shadow-lg animate-bounce";
+                title.innerText = "Jawaban Benar!";
+                title.className = "font-serif text-2xl font-bold text-green-600 mb-2";
+                btn.className = "w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl text-sm font-bold tracking-wider uppercase transition-all duration-200 shadow-md focus:outline-none";
+            } else {
+                // Set warna merah untuk jawaban Salah tanpa menghapus struktur utama modal
+                content.className = "bg-white dark:bg-navy-light w-full max-w-md p-6 rounded-3xl shadow-2xl border-2 border-red-500 flex flex-col items-center text-center transform transition-all duration-300";
+                icon.innerText = "🧐";
+                icon.className = "w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-4xl mb-4 shadow-lg";
+                title.innerText = "Kurang Tepat!";
+                title.className = "font-serif text-2xl font-bold text-red-500 mb-2";
+                btn.className = "w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-bold tracking-wider uppercase transition-all duration-200 shadow-md focus:outline-none";
+            }
+
+            expText.innerText = explanation;
+            
+            if(currentQuestion === quizData.length - 1) {
+                btn.innerText = "Lihat Hasil Akhir";
+            } else {
+                btn.innerText = "Lanjut Soal Berikutnya";
+            }
+        }
+
+        function closeFeedbackModal() {
+            const modal = document.getElementById('quizFeedbackModal');
+            const content = document.getElementById('modalContent');
+            
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                currentQuestion++;
+                renderQuiz();
+            }, 200);
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            window.location.reload();
+        }
+
+        // Jalankan Kuis Utama
+        renderQuiz();
+    </script>
+</body>
+</html>
